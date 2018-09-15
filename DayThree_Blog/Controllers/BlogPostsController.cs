@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using DayThree_Blog.Helpers;
 using DayThree_Blog.Models;
 
 namespace DayThree_Blog.Controllers
@@ -21,13 +22,15 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: BlogPosts/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(string Slug)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(Slug))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BlogPost blogPost = db.BlogPosts.Find(id);
+
+            BlogPost blogPost = db.BlogPosts.FirstOrDefault(p => p.Slug == Slug);
+
             if (blogPost == null)
             {
                 return HttpNotFound();
@@ -36,6 +39,7 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: BlogPosts/Create
+        [Authorize (Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -46,10 +50,23 @@ namespace DayThree_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Created,Updated,Title,Abstract,Slug,MediaUrl,Published")] BlogPost blogPost)
+        public ActionResult Create([Bind(Include = "Id,Title,Body,MediaUrl,Published")] BlogPost blogPost)
         {
             if (ModelState.IsValid)
             {
+                var slug = StringUtilities.URLFriendly(blogPost.Title);
+                if (String.IsNullOrWhiteSpace(slug)) {
+                    ModelState.AddModelError("Title", "Invalid title");
+                    return View(blogPost);
+                }
+                if (db.BlogPosts.Any(p => p.Slug == slug))
+                {
+                    ModelState.AddModelError("Title", "The title must be unique");
+                    return View(blogPost);
+                }
+
+                blogPost.Slug = slug;
+                blogPost.Created = DateTimeOffset.Now;
                 db.BlogPosts.Add(blogPost);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -59,13 +76,15 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: BlogPosts/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(string Slug)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(Slug))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BlogPost blogPost = db.BlogPosts.Find(id);
+
+            BlogPost blogPost = db.BlogPosts.FirstOrDefault(p => p.Slug == Slug);
+
             if (blogPost == null)
             {
                 return HttpNotFound();
@@ -73,15 +92,36 @@ namespace DayThree_Blog.Controllers
             return View(blogPost);
         }
 
+
         // POST: BlogPosts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Created,Updated,Title,Abstract,Slug,MediaUrl,Published")] BlogPost blogPost)
+        public ActionResult Edit([Bind(Include = "Id,Slug,Created,Updated,Title,Body,Abstract,Slug,MediaUrl,Published")] BlogPost blogPost)
         {
             if (ModelState.IsValid)
             {
+                var title = StringUtilities.URLFriendly(blogPost.Title);
+                if (blogPost.Slug != title)
+                {
+                    if (String.IsNullOrWhiteSpace(title))
+                    {
+                        ModelState.AddModelError("Title", "Invalid title");
+                        return View(blogPost);
+                    }
+                    if (db.BlogPosts.Any(p => p.Slug == title))
+                    {
+                        ModelState.AddModelError("Title", "The title must be unique");
+                        return View(blogPost);
+                    }
+
+                    blogPost.Slug = title;
+                }
+
+
+
+                blogPost.Updated = DateTimeOffset.Now;
                 db.Entry(blogPost).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -90,13 +130,15 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: BlogPosts/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(string Slug)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(Slug))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BlogPost blogPost = db.BlogPosts.Find(id);
+
+            BlogPost blogPost = db.BlogPosts.FirstOrDefault(p => p.Slug == Slug);
+
             if (blogPost == null)
             {
                 return HttpNotFound();
@@ -107,9 +149,9 @@ namespace DayThree_Blog.Controllers
         // POST: BlogPosts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string Slug)
         {
-            BlogPost blogPost = db.BlogPosts.Find(id);
+            BlogPost blogPost = db.BlogPosts.FirstOrDefault(p => p.Slug == Slug);
             db.BlogPosts.Remove(blogPost);
             db.SaveChanges();
             return RedirectToAction("Index");

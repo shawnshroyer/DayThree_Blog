@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace DayThree_Blog.Models
 {
@@ -13,6 +14,8 @@ namespace DayThree_Blog.Models
         public string Title { get; set; }
         public string Slug { get; set; }
         public string Abstract { get; set; }
+
+        [AllowHtml]
         public string Body { get; set; }
         public string MediaUrl { get; set; }
         public bool Published { get; set; }

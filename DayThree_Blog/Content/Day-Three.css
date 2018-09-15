@@ -1,0 +1,16 @@
+﻿.navbar-custom.is-fixed {
+    position: fixed;
+    top: -61px;
+    background-color: rgba(110, 160, 40, .85);
+    border-bottom: 0px solid #f2f2f2;
+    -webkit-transition: -webkit-transform .3s;
+    -moz-transition: -moz-transform .3s;
+    transition: transform opacity .4s;
+    transition-timing-function: ease-out
+}
+
+.post-preview:nth-of-type(even) {
+    overflow: auto;
+    /*background-color: #c7e698;*/
+    background-color: #eaf5d6;
+}
