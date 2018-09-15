@@ -50,7 +50,7 @@ namespace DayThree_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Body,MediaUrl,Published")] BlogPost blogPost)
+        public ActionResult Create([Bind(Include = "Id,Title,Abstract,Body,MediaUrl,Published")] BlogPost blogPost)
         {
             if (ModelState.IsValid)
             {

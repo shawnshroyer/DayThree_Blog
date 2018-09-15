@@ -233,6 +233,8 @@
     <Content Include="img\Delete-Blog.png" />
     <Content Include="img\Edit-Blog.png" />
     <Content Include="img\home-bg.jpg" />
+    <Content Include="img\Login.png" />
+    <Content Include="img\manage.png" />
     <Content Include="img\post-bg.jpg" />
     <Content Include="img\post-sample-image.jpg" />
     <Content Include="img\Road-Home.png" />
