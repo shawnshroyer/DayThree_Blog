@@ -76,6 +76,7 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: BlogPosts/Edit/5
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult Edit(string Slug)
         {
             if (string.IsNullOrWhiteSpace(Slug))
@@ -130,6 +131,7 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: BlogPosts/Delete/5
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult Delete(string Slug)
         {
             if (string.IsNullOrWhiteSpace(Slug))
