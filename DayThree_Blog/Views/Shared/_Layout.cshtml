@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Clean Blog</title>
+    <title>Rant Blog</title>
 
+    <link rel="icon" type="image/png" sizes="32x32" href="~/img/favcon.png">
     <!-- Bootstrap Core CSS -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 
@@ -44,7 +45,7 @@
                 @*<a class="navbar-brand" href="index.html">Start Bootstrap</a>*@
                 <!-- Alertnate if the at action link does not work for some reason maybe needed for css issues -->
                 @*<a class="navbar-brand" href="@Url.Action("Index", "BlogPosts")">Start Bootstrap</a>*@
-                @Html.ActionLink("Shawn Shroyer", "Index", "BlogPosts",null, new { @class="navbar-brand"})
+                @Html.ActionLink("Shawn Shroyer", "Index", "BlogPosts", null, new { @class = "navbar-brand" })
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -56,19 +57,22 @@
                         @Html.ActionLink("About", "About", "Home")
                     </li>
                     <li>
+                        @Html.ActionLink("Contact Me", "Contact", "Home")
+                    </li>
+                    <li>
                         @if (User.IsInRole("Admin"))
                         {
-                        @Html.ActionLink("Create New", "Create", "BlogPosts")
+                            @Html.ActionLink("Create New", "Create", "BlogPosts")
                         }
                     </li>
                     <li>
                         @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
-                        {                     
+                        {
                             object routeObj;
                             ViewContext.RouteData.Values.TryGetValue("slug", out routeObj);
-                            if(routeObj != null)
+                            if (routeObj != null)
                             {
-                                @Html.ActionLink("Edit Post", "Edit", new { slug = routeObj.ToString()})
+                                @Html.ActionLink("Edit Post", "Edit", new { slug = routeObj.ToString() })
                             }
                         }
                     </li>
@@ -92,7 +96,7 @@
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <ul class="list-inline text-center">
                         <li>
-                            <a href="https://www.linkedin.com/in/shawn-shroyer-37074ba7">
+                            <a href="https://www.linkedin.com/in/shawn-shroyer-37074ba7" target="_blank">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-fw fa-linkedin fa-stack-1x fa-inverse"></i>
@@ -100,7 +104,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="https://shawn.shroyer.family">
+                            <a href="https://shawn.shroyer.family" target="_blank">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-fw fa-globe fa-stack-1x fa-inverse"></i>
@@ -108,7 +112,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="https://github.com/shawnshroyer" target="_blank">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -135,6 +139,9 @@
 
     <!-- Theme JavaScript -->
     <script src="~/Scripts/clean-blog.min.js"></script>
+
+    <!-- Sweet Alerts -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     @RenderSection("scripts", required: false)
 </body>

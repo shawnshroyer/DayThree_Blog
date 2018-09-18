@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -50,7 +51,7 @@ namespace DayThree_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Abstract,Body,MediaUrl,Published")] BlogPost blogPost)
+        public ActionResult Create([Bind(Include = "Id,Title,Abstract,Body,MediaUrl,Published")] BlogPost blogPost, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +64,13 @@ namespace DayThree_Blog.Controllers
                 {
                     ModelState.AddModelError("Title", "The title must be unique");
                     return View(blogPost);
+                }
+
+                if (ImageUploadValidator.IsWebFriendlyImage(image))
+                {
+                    var fileName = Path.GetFileName(image.FileName);
+                    image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                    blogPost.MediaUrl = "/Uploads/" + fileName;
                 }
 
                 blogPost.Slug = slug;
@@ -99,7 +107,7 @@ namespace DayThree_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Slug,Created,Updated,Title,Body,Abstract,Slug,MediaUrl,Published")] BlogPost blogPost)
+        public ActionResult Edit([Bind(Include = "Id,Slug,Created,Updated,Title,Body,Abstract,Slug,MediaUrl,Published")] BlogPost blogPost, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
@@ -120,7 +128,12 @@ namespace DayThree_Blog.Controllers
                     blogPost.Slug = title;
                 }
 
-
+                if (ImageUploadValidator.IsWebFriendlyImage(image))
+                {
+                    var fileName = Path.GetFileName(image.FileName);
+                    image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                    blogPost.MediaUrl = "/Uploads/" + fileName;
+                }
 
                 blogPost.Updated = DateTimeOffset.Now;
                 db.Entry(blogPost).State = EntityState.Modified;
