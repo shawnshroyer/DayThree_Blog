@@ -17,6 +17,7 @@ namespace DayThree_Blog.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -158,7 +159,18 @@ namespace DayThree_Blog.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                if (db.Users.Any(u => u.DisplayName == model.DisplayName))
+                {
+                    ModelState.AddModelError("DisplayName", "Name already taken, try again!");
+                    return View(model);
+                };
+
+                var user = new ApplicationUser {FirstName = model.FirstName,
+                                                LastName = model.LastName,
+                                                DisplayName = model.DisplayName,
+                                                UserName = model.Email,
+                                                Email = model.Email };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

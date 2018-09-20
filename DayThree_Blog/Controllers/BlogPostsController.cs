@@ -9,6 +9,9 @@ using System.Web;
 using System.Web.Mvc;
 using DayThree_Blog.Helpers;
 using DayThree_Blog.Models;
+using PagedList;
+using PagedList.Mvc;
+
 
 namespace DayThree_Blog.Controllers
 {
@@ -17,9 +20,14 @@ namespace DayThree_Blog.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BlogPosts
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.BlogPosts.ToList());
+            var allPosts = db.BlogPosts.Where(b => b.Published).OrderByDescending(p => p.Created);
+
+            int pageSize = 2;
+            int pageNumber = (page ?? 1);
+
+            return View(allPosts.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: BlogPosts/Details/5

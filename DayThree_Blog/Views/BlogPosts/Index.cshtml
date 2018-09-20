@@ -1,4 +1,6 @@
-﻿@model IEnumerable<DayThree_Blog.Models.BlogPost>
+﻿@model IPagedList<DayThree_Blog.Models.BlogPost>
+@using PagedList
+@using PagedList.Mvc
 
 <!-- Page Header -->
 <!-- Set your background image for this header on the line below. -->
@@ -31,17 +33,21 @@
                         <p class="post-subtitle">@post.Abstract</p>
                     </a>
 
-                    <p class="post-meta">Posted on @post.Created.ToString("f")</p>
-                </div>
+                    <p class="post-meta">Posted on @post.Created.ToString("f")
+
+                        @if (post.Updated != null)
+                        {
+                            @:<br/>Updated on @DateTime.Parse(post.Updated.ToString()).ToString("f")
+                        }
+                    </p>
+
+            </div>
                 <hr />
             }
 
             <!-- Pager -->
-            @*<ul class="pager">
-                <li class="next">
-                    <a href="#">Older Posts &rarr;</a>
-                </li>
-            </ul>*@
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
         </div>
     </div>
 </div>
