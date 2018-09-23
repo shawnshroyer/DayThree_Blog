@@ -33,21 +33,22 @@
                         <p class="post-subtitle">@post.Abstract</p>
                     </a>
 
-                    <p class="post-meta">Posted on @post.Created.ToString("f")
+                    <p class="post-meta">
+                        Posted on @post.Created.ToString("f")
 
                         @if (post.Updated != null)
                         {
-                            @:<br/>Updated on @DateTime.Parse(post.Updated.ToString()).ToString("f")
+                            @:<br />Updated on @DateTime.Parse(post.Updated.ToString()).ToString("f")
                         }
                     </p>
 
-            </div>
+                </div>
                 <hr />
             }
 
             <!-- Pager -->
-            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+            <!-- Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount -->
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchStr = ViewBag.Search }))
         </div>
     </div>
 </div>

@@ -18,3 +18,7 @@
 .subheading {
     font-weight: bold;
 }
+
+button#searchStr {
+    background-color: rgb(110, 160, 40);
+}

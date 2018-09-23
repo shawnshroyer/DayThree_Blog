@@ -7,9 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DayThree_Blog.Models;
+using Microsoft.AspNet.Identity;
 
 namespace DayThree_Blog.Controllers
 {
+    [RequireHttps]
     public class CommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -36,31 +38,35 @@ namespace DayThree_Blog.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Create
-        public ActionResult Create()
-        {
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName");
-            ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title");
-            return View();
-        }
+        //// GET: Comments/Create
+        //public ActionResult Create()
+        //{
+        //    ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName");
+        //    ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title");
+        //    return View();
+        //}
 
         // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,BlogPostId,AuthorId,Body,Created,Updated,UpdateReason")] Comment comment)
+        public ActionResult Create([Bind(Include = "BlogPostId,Body")] Comment comment, string commentBody, string slug)
         {
             if (ModelState.IsValid)
             {
+                comment.AuthorId = User.Identity.GetUserId();
+
+                comment.Body = commentBody;
+                comment.Created = DateTimeOffset.Now;
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "BlogPosts", new { slug });
             }
 
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
-            ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title", comment.BlogPostId);
-            return View(comment);
+            //ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
+            //ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title", comment.BlogPostId);
+            return RedirectToAction("Details", "BlogPosts", new { slug });
         }
 
         // GET: Comments/Edit/5
@@ -99,8 +105,9 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: Comments/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, string slug)
         {
+            ViewBag.Slug = slug;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -118,6 +125,8 @@ namespace DayThree_Blog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+
+
             Comment comment = db.Comments.Find(id);
             db.Comments.Remove(comment);
             db.SaveChanges();

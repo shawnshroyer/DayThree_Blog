@@ -11,6 +11,7 @@ using DayThree_Blog.Models;
 namespace DayThree_Blog.Controllers
 {
     [Authorize]
+    [RequireHttps]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

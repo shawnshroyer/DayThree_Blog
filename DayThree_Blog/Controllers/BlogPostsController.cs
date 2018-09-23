@@ -15,19 +15,21 @@ using PagedList.Mvc;
 
 namespace DayThree_Blog.Controllers
 {
+    [RequireHttps]
     public class BlogPostsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BlogPosts
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string searchStr)
         {
-            var allPosts = db.BlogPosts.Where(b => b.Published).OrderByDescending(p => p.Created);
+            ViewBag.Search = searchStr;
+            var blogList = IndexSearch(searchStr);
 
             int pageSize = 2;
             int pageNumber = (page ?? 1);
-
-            return View(allPosts.ToPagedList(pageNumber, pageSize));
+            
+            return View(blogList.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: BlogPosts/Details/5
@@ -187,6 +189,25 @@ namespace DayThree_Blog.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public IQueryable<BlogPost> IndexSearch(string searchStr)
+        {
+            IQueryable<BlogPost> result = null;
+            if (searchStr != null)
+            {
+                result = db.BlogPosts.AsQueryable();
+                result = result.Where(p => p.Title.Contains(searchStr) ||
+                                            p.Abstract.Contains(searchStr) ||
+                                            p.Body.Contains(searchStr) ||
+                                            p.Slug.Contains(searchStr));
+            }
+            else
+            {
+                result = db.BlogPosts.AsQueryable();
+            }
+
+            return result.OrderByDescending(p => p.Created);
         }
     }
 }

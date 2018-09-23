@@ -13,6 +13,7 @@ using DayThree_Blog.Models;
 namespace DayThree_Blog.Controllers
 {
     [Authorize]
+    [RequireHttps]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -290,7 +291,6 @@ namespace DayThree_Blog.Controllers
             return View();
         }
 
-        [HttpGet]
         [AllowAnonymous]
         public ActionResult ResendEmailConfirmation()
         {

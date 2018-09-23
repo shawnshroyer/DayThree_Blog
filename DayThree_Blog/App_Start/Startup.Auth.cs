@@ -5,6 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
+using Owin.Security.Providers.LinkedIn;
 using DayThree_Blog.Models;
 
 namespace DayThree_Blog
@@ -58,11 +59,13 @@ namespace DayThree_Blog
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "758543454643-g7gn0o6ep6p79t8iu6conhldc2cfkojt.apps.googleusercontent.com",
+                ClientSecret = "qoNHbGIEgUMity0EGOKASFLe"
+            });
+
+            app.UseLinkedInAuthentication("78zt16i0yyybt2", "Xdy3SdMBisLXyluQ");
         }
     }
 }
