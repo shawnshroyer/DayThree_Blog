@@ -70,7 +70,7 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: Comments/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? id, string slug)
         {
             if (id == null)
             {
@@ -81,8 +81,9 @@ namespace DayThree_Blog.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
-            ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title", comment.BlogPostId);
+
+            ViewBag.Slug = slug;
+
             return View(comment);
         }
 
@@ -91,23 +92,26 @@ namespace DayThree_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,BlogPostId,AuthorId,Body,Created,Updated,UpdateReason")] Comment comment)
+        public ActionResult Edit([Bind(Include = "Id,BlogPostId,AuthorId,Body,Created,Updated,UpdateReason")] Comment comment, string slug)
         {
             if (ModelState.IsValid)
             {
+                comment.Updated = DateTimeOffset.Now;
+
                 db.Entry(comment).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "BlogPosts", new { slug });
             }
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
-            ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title", comment.BlogPostId);
-            return View(comment);
+
+            //ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
+            //ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title", comment.BlogPostId);
+            return RedirectToAction("Details", "BlogPosts", new { slug });
         }
 
         // GET: Comments/Delete/5
         public ActionResult Delete(int? id, string slug)
         {
-            ViewBag.Slug = slug;
+            slug = TempData["Slug"].ToString();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -117,7 +121,7 @@ namespace DayThree_Blog.Controllers
             {
                 return HttpNotFound();
             }
-            return View(comment);
+            return RedirectToAction("Details", "BlogPosts", new { slug });
         }
 
         // POST: Comments/Delete/5
@@ -125,12 +129,10 @@ namespace DayThree_Blog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-
-
             Comment comment = db.Comments.Find(id);
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "BlogPosts");
         }
 
         protected override void Dispose(bool disposing)

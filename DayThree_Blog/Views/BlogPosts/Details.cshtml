@@ -50,32 +50,32 @@
                     </div>
                 </div>
             }
-            <div class="row">
-                @foreach (var comment in Model.Comments)
-                {
-                    <div class="panel panel-default container">
-                        <div class="panel-heading row">
-                            <div class="col-md-10">
-                                Author: @comment.Author.DisplayName
-                            </div>
+        </div>
 
-                            @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
-                            {
-                                <div class="col-md-2">
-                                @Html.ActionLink(" [EDIT] ", "Edit", "Comments")
-                                @Html.ActionLink(" [DELETE] ", "Delete", "Comments", new { comment.Id, Model.Slug } , null)
-                                </div>
-                            }
+        <div class="row">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="panel panel-default container">
+                    <div class="panel-heading row">
+                        <div class="col-md-10">
+                            Author: @comment.Author.DisplayName
                         </div>
 
-                        <div class="panel-body row">@comment.Body</div>
-                        <div class="panel-footer row">Posted: @comment.Created.ToString("f")</div>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                        {
+                        <div class="col-md-2">
+                            @Html.ActionLink(" [EDIT] ", "Edit", "Comments", new { comment.Id, Model.Slug }, null)
+                            @Html.ActionLink(" [DELETE] ", "Delete", "Comments", new { comment.Id, Model.Slug }, null)
+                        </div>
+                        }
                     </div>
-                }
-            </div>
 
-
+                    <div class="panel-body row">@comment.Body</div>
+                    <div class="panel-footer row">Posted: @comment.Created.ToString("f")</div>
+                </div>
+            }
         </div>
     </div>
 </article>
 <hr>
+}
