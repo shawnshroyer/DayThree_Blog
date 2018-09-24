@@ -231,6 +231,7 @@
     <Content Include="img\about-me.png" />
     <Content Include="img\contact-me.png" />
     <Content Include="img\forgot-password.png" />
+    <Content Include="img\Manage-Logins.png" />
     <Content Include="img\Register.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />

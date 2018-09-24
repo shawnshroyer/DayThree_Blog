@@ -94,7 +94,7 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: BlogPosts/Edit/5
-        [Authorize(Roles = "Admin,Moderator")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(string Slug)
         {
             if (string.IsNullOrWhiteSpace(Slug))

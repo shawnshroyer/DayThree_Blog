@@ -77,7 +77,7 @@
                         }
                     </li>
                     <li>
-                        @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                        @if (User.IsInRole("Admin"))
                         {
                             object routeObj;
                             ViewContext.RouteData.Values.TryGetValue("slug", out routeObj);
