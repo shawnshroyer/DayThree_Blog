@@ -48,11 +48,12 @@
                 <!-- Alertnate if the at action link does not work for some reason maybe needed for css issues -->
                 @*<a class="navbar-brand" href="@Url.Action("Index", "BlogPosts")">Start Bootstrap</a>*@
                 @Html.ActionLink("Shawn Shroyer", "Index", "BlogPosts", null, new { @class = "navbar-brand" })
+
                 @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form navbar-brand" }))
                 {
                     <div class="controls controls-row search-row">
-                        <input id="searchStrIn" name="searchStrIn" class="input-block-level" type="text"placeholder="Search" />
-                        <button id="searchStr" name="searchStr" class="btn-sm" type="submit">
+                        <input id="searchStr" name="searchStr" class="input-block-level" type="text" placeholder="Search" />
+                        <button id="searchStrBtn" class="btn-sm" type="submit">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>

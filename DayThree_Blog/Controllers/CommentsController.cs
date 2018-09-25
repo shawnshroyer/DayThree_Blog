@@ -17,26 +17,27 @@ namespace DayThree_Blog.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
-        public ActionResult Index()
-        {
-            var comments = db.Comments.Include(c => c.Author).Include(c => c.BlogPost);
-            return View(comments.ToList());
-        }
+        //[Authorize (Roles = "Admin, Moderator")]
+        //public ActionResult Index()
+        //{
+        //    var comments = db.Comments.Include(c => c.Author).Include(c => c.BlogPost);
+        //    return View(comments.ToList());
+        //}
 
         // GET: Comments/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Comment comment = db.Comments.Find(id);
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(comment);
-        }
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Comment comment = db.Comments.Find(id);
+        //    if (comment == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(comment);
+        //}
 
         //// GET: Comments/Create
         //public ActionResult Create()
@@ -70,6 +71,7 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: Comments/Edit/5
+        [Authorize (Roles = "Admin, Moderator")]
         public ActionResult Edit(int? id, string slug)
         {
             if (id == null)
@@ -109,9 +111,12 @@ namespace DayThree_Blog.Controllers
         }
 
         // GET: Comments/Delete/5
+        [Authorize (Roles = "Admin")]
         public ActionResult Delete(int? id, string slug)
         {
-            slug = TempData["Slug"].ToString();
+            TempData["Slug"] = slug; // This is to get data to post and seems to work best with hidden element
+            ViewBag.Slug = slug; // This seem to work best for doing a return to action
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -121,18 +126,19 @@ namespace DayThree_Blog.Controllers
             {
                 return HttpNotFound();
             }
-            return RedirectToAction("Details", "BlogPosts", new { slug });
+            return View(comment);
         }
 
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id, string slug)
         {
             Comment comment = db.Comments.Find(id);
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index", "BlogPosts");
+
+            return RedirectToAction("Details", "BlogPosts", new { slug });
         }
 
         protected override void Dispose(bool disposing)

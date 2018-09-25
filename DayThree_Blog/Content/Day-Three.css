@@ -19,6 +19,11 @@
     font-weight: bold;
 }
 
-button#searchStr {
+button#searchStrBtn {
     background-color: rgb(110, 160, 40);
+}
+
+input#searchStr {
+    color: black;
+    font-size: small;
 }

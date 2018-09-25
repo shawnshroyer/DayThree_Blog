@@ -71,14 +71,15 @@
         </dd>
 
     </dl>
-    
+
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
+        @Html.Hidden("slug", TempData["Slug"])
 
-    <div class="form-actions no-color">
-        @Html.ActionLink("Back to Blog", "Details", "BlogPosts", new { ViewBag.Slug }, new { @class = "btn btn-default" })
-        <input type="submit" value="Delete" class="btn btn-default btn-danger" />
-    </div>
+        <div class="form-actions no-color">
+            @Html.ActionLink("Back to Blog", "Details", "BlogPosts", new { ViewBag.Slug }, new { @class = "btn btn-default" })
+            <input type="submit" value="Delete" class="btn btn-default btn-danger" />
+        </div>
     }
 </div>
