@@ -21,6 +21,8 @@
 
 button#searchStrBtn {
     background-color: rgb(110, 160, 40);
+    border-color: black;
+    border-width: 1px;
 }
 
 input#searchStr {
@@ -31,4 +33,30 @@ input#searchStr {
 .color-red
 {
     background-color: darkred;
+}
+
+header h1, header h2, header span {
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+}
+
+header span {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+/*nav a {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}*/
+
+.navbar-custom.is-fixed .nav li a {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    color: #fff;
+}
+
+.navbar-custom.is-fixed .navbar-brand {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    color: #fff;
+}
+
+nav .is-visible a {
+    text-shadow: unset;
 }

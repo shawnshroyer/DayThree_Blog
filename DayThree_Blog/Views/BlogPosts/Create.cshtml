@@ -80,7 +80,7 @@
                 <div class="col-md-10">
                     <input name="image" type="file" class="form-control" id="fileUpload" />
                     @*@Html.EditorFor(model => model.MediaUrl, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MediaUrl, "", new { @class = "text-danger" })*@
+                        @Html.ValidationMessageFor(model => model.MediaUrl, "", new { @class = "text-danger" })*@
                 </div>
             </div>
 
@@ -104,11 +104,12 @@
     }
 </div>
 
-@Scripts.Render("~/bundles/jqueryval")
-@section Scripts {
-    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+
+@section scripts {
     <script src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
-    <script type="text/javascript"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+
     <script>
         $(function () {
             tinymce.init({

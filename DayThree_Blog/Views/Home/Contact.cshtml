@@ -67,7 +67,9 @@
     {
         if (TempData["status"].ToString() == "success")
         {
-            <script>swal("Congratulations!", "Your message has been sent!", "success");</script>
+            <script>swal("Congratulations!", "Your message has been sent!", "success")
+                    .then(
+                        function() { window.location.href = "@Url.Action("Index", "BlogPosts", null)" });</script>
         }
 
         if (TempData["status"].ToString() == "error")
