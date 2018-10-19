@@ -207,6 +207,7 @@ namespace DayThree_Blog.Controllers
                 result = db.BlogPosts.AsQueryable();
             }
 
+            //return result.OrderByDescending(p => p.Created).Where(p => p.Published.Equals(true));
             return result.OrderByDescending(p => p.Created);
         }
     }

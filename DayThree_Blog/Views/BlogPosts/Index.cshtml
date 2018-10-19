@@ -25,25 +25,51 @@
 
             @foreach (var post in Model)
             {
-                <div class="post-preview">
-                    <a href="@Url.Action("Details", "BlogPosts", new { slug = post.Slug})">
-                        <h2 class="post-title">
-                            @post.Title
-                        </h2>
-                        <p class="post-subtitle">@post.Abstract</p>
-                    </a>
+                if (post.Published)
+                {
+                    <div class="post-preview">
+                        <a href="@Url.Action("Details", "BlogPosts", new { slug = post.Slug })">
+                            <h2 class="post-title">
+                                @post.Title
+                            </h2>
+                            <p class="post-subtitle">@post.Abstract</p>
+                        </a>
 
-                    <p class="post-meta">
-                        Posted on @post.Created.ToString("f")
+                        <p class="post-meta">
+                            Posted on @post.Created.ToString("f")
 
-                        @if (post.Updated != null)
-                        {
-                            @:<br />Updated on @DateTime.Parse(post.Updated.ToString()).ToString("f")
-                        }
-                    </p>
+                            @if (post.Updated != null)
+                            {
+                                @:<br />Updated on @DateTime.Parse(post.Updated.ToString()).ToString("f")
+                            }
+                        </p>
+                    </div>
+                    <hr />
+                }
+                else
+                {
+                    if (User.IsInRole("Admin"))
+                    {
+                        <div class="post-preview color-red">
+                            <a href="@Url.Action("Details", "BlogPosts", new { slug = post.Slug })">
+                                <h2 class="post-title">
+                                    @post.Title
+                                </h2>
+                                <p class="post-subtitle">@post.Abstract</p>
+                            </a>
 
-                </div>
-                <hr />
+                            <p class="post-meta">
+                                Posted on @post.Created.ToString("f")
+
+                                @if (post.Updated != null)
+                                {
+                                    @:<br />Updated on @DateTime.Parse(post.Updated.ToString()).ToString("f")
+                                }
+                            </p>
+                        </div>
+                        <hr />
+                    }
+                }
             }
 
             <!-- Pager -->

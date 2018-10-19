@@ -27,3 +27,8 @@ input#searchStr {
     color: black;
     font-size: small;
 }
+
+.color-red
+{
+    background-color: darkred;
+}
